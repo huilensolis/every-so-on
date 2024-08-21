@@ -1,8 +1,4 @@
-use std::{
-    fs,
-    // thread::sleep,
-    // time::Duration,
-};
+use std::{fs, thread::sleep, time::Duration};
 
 use rand::Rng;
 
@@ -11,12 +7,13 @@ fn main() {
 }
 
 fn run_recursively() {
-    // sleep(Duration::new(3, 0)); // TODO: uncomment line when finishing debug mode
+    sleep(Duration::new(20, 0)); // TODO: uncomment line when finishing debug mode
 
     let picked_wallpaper_file_path = pick_random_wallpaper_file();
 
-    set_wallpaper(&picked_wallpaper_file_path)
-    // run_recursively(); // TODO: uncomment line when finishing debug mode
+    set_wallpaper(&picked_wallpaper_file_path).expect("error setting new wallpaper");
+
+    run_recursively(); // TODO: uncomment line when finishing debug mode
 }
 
 fn pick_random_wallpaper_file() -> std::ffi::OsString {
@@ -56,14 +53,18 @@ fn pick_random_wallpaper_file() -> std::ffi::OsString {
     picked_wallpaper_path.as_os_str().to_owned()
 }
 
-fn set_wallpaper(new_wallpaper_path: &std::ffi::OsString) {
+fn set_wallpaper(new_wallpaper_path: &std::ffi::OsString) -> Result<(), std::io::Error> {
     let result = std::process::Command::new("swaybg")
         .arg("-m")
         .arg("center")
         .arg("-i")
         .arg(new_wallpaper_path.to_str().unwrap())
-        .output()
-        .expect("ls command failed to start");
+        .spawn();
 
-    println!("{:?}", &result);
+    let return_result = match result {
+        Ok(_child) => Ok(()),
+        Err(error) => Err(error),
+    };
+
+    return_result
 }
