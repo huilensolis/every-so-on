@@ -1,8 +1,7 @@
 use std::{
     fs,
-    path::{Path, PathBuf},
-    thread::sleep,
-    time::Duration,
+    // thread::sleep,
+    // time::Duration,
 };
 
 use rand::Rng;
@@ -36,8 +35,9 @@ fn pick_random_wallpaper_file() -> std::ffi::OsString {
 
     let wallpaper_files = fs::read_dir(&wallpaper_dir_path).unwrap_or_else(|error_msg| {
         panic!(
-            "could not read wallpapers directory, directory {:?} is missing",
-            &wallpaper_dir_path.as_os_str()
+            "could not read wallpapers directory, directory {:?} is missing; error message: {}",
+            &wallpaper_dir_path.as_os_str(),
+            error_msg
         )
     });
 
@@ -56,6 +56,14 @@ fn pick_random_wallpaper_file() -> std::ffi::OsString {
     picked_wallpaper_path.as_os_str().to_owned()
 }
 
-fn set_wallpaper(new_wallpaper_path: &std::ffi::OsStr) {
-    println!("{:?}", &new_wallpaper_path);
+fn set_wallpaper(new_wallpaper_path: &std::ffi::OsString) {
+    let result = std::process::Command::new("swaybg")
+        .arg("-m")
+        .arg("center")
+        .arg("-i")
+        .arg(new_wallpaper_path.to_str().unwrap())
+        .output()
+        .expect("ls command failed to start");
+
+    println!("{:?}", &result);
 }
