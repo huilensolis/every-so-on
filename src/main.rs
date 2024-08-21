@@ -7,13 +7,13 @@ fn main() {
 }
 
 fn run_recursively() {
-    sleep(Duration::new(20, 0)); // TODO: uncomment line when finishing debug mode
+    sleep(Duration::new(60 * 60, 0));
 
     let picked_wallpaper_file_path = pick_random_wallpaper_file();
 
     set_wallpaper(&picked_wallpaper_file_path).expect("error setting new wallpaper");
 
-    run_recursively(); // TODO: uncomment line when finishing debug mode
+    run_recursively();
 }
 
 fn pick_random_wallpaper_file() -> std::ffi::OsString {
@@ -61,10 +61,8 @@ fn set_wallpaper(new_wallpaper_path: &std::ffi::OsString) -> Result<(), std::io:
         .arg(new_wallpaper_path.to_str().unwrap())
         .spawn();
 
-    let return_result = match result {
+    match result {
         Ok(_child) => Ok(()),
         Err(error) => Err(error),
-    };
-
-    return_result
+    }
 }
