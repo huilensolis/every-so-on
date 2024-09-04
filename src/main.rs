@@ -10,9 +10,6 @@ fn run_recursively() {
     let picked_wallpaper_file_path = pick_random_wallpaper_file();
 
     set_wallpaper(&picked_wallpaper_file_path).expect("error setting new wallpaper");
-
-    sleep(Duration::new(60 * 60, 0));
-    run_recursively();
 }
 
 fn pick_random_wallpaper_file() -> std::ffi::OsString {
