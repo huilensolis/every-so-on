@@ -52,7 +52,7 @@ fn pick_random_wallpaper_file() -> std::ffi::OsString {
 fn set_wallpaper(new_wallpaper_path: &std::ffi::OsString) -> Result<(), std::io::Error> {
     let result = std::process::Command::new("swaybg")
         .arg("-m")
-        .arg("center")
+        .arg("fill")
         .arg("-i")
         .arg(new_wallpaper_path.to_str().unwrap())
         .spawn();
